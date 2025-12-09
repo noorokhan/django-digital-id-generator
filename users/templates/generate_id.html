@@ -1,0 +1,203 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generate Digital ID</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f1f1f1;
+            font-family: 'Poppins', sans-serif;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 750px;
+            margin-top: 50px;
+        }
+
+        .card {
+            border: none;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            background-color: #ffffff;
+        }
+
+        .card-header {
+            background-color: #004b87;
+            color: white;
+            font-size: 1.5rem;
+            text-align: center;
+            border-radius: 15px;
+            padding: 20px;
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        .id-photo {
+            text-align: center;
+            margin-bottom: 30px;
+            border-radius: 50%;
+            overflow: hidden;
+            width: 150px;
+            height: 150px;
+            border: 4px solid #004b87;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            background-color: #f1f1f1;
+        }
+
+        .id-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .info-section {
+            margin-bottom: 25px;
+        }
+
+        .info-section p {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+        }
+
+        .info-section strong {
+            color: #004b87;
+        }
+
+        .id-proof a {
+            text-decoration: none;
+            color: #004b87;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+
+        .id-proof a:hover {
+            color: #002f5b;
+        }
+
+        .download-btn {
+            width: 100%;
+            padding: 1.2rem;
+            background-color: #28a745;
+            border: none;
+            font-size: 1.4rem;
+            color: white;
+            border-radius: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: background-color 0.3s;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .download-btn:hover {
+            background-color: #218838;
+        }
+
+        .party-name {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #ff5722;
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        .congress-logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .congress-logo img {
+            width: 100px;
+            height: auto;
+        }
+
+        .contact-info {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #777;
+        }
+
+        .contact-info a {
+            color: #004b87;
+            font-weight: bold;
+        }
+
+        .contact-info a:hover {
+            color: #002f5b;
+        }
+
+        /* Mobile responsiveness */
+        @media (max-width: 576px) {
+            .id-photo {
+                width: 120px;
+                height: 120px;
+            }
+
+            .download-btn {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="card">
+            <div class="congress-logo">
+                <img src="{% static 'congress-inc-logo.png' %}" alt="Congress Party Logo">
+            </div>
+
+            <div class="card-header">
+                <h2>Your Digital ID</h2>
+                <p class="party-name">{{ party_name }}</p>
+            </div>
+            <div class="card-body">
+                <div class="id-photo">
+                    {% if user_profile.photo %}
+                        <img src="{{ user_profile.photo.url }}" alt="Passport Photo">
+                    {% else %}
+                        <p>No photo uploaded</p>
+                    {% endif %}
+                </div>
+
+                <div class="info-section">
+                    <p><strong>Name:</strong> {{ user_profile.name }}</p>
+                    <p><strong>Father's Name:</strong> {{ user_profile.father_name }}</p>
+                    <p><strong>Age:</strong> {{ user_profile.age|default:"Not provided" }}</p>
+                    <p><strong>Date of Birth:</strong> {{ user_profile.dob|default:"Not provided" }}</p>
+                    <p><strong>Address:</strong> {{ user_profile.address|default:"Not provided" }}</p>
+                </div>
+
+                <div class="info-section id-proof">
+                    <p><strong>ID Proof:</strong>
+                        {% if user_profile.user_id_proof %}
+                            <a href="{{ user_profile.user_id_proof.url }}" target="_blank">Download ID Proof</a>
+                        {% else %}
+                            Not provided
+                        {% endif %}
+                    </p>
+                </div>
+
+                <a href="{% url 'download_id' %}" class="btn download-btn">Download Your Digital ID</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="contact-info">
+        <p>If you have any issues, feel free to <a href="mailto:support@congressparty.org">contact us</a>.</p>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

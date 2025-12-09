@@ -1,0 +1,221 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Details</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* Body and overall styling */
+        body {
+            background-color: #f9fafb;
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: #333;
+        }
+
+        /* Container for form */
+        .form-container {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            width: 100%;
+            animation: fadeIn 0.7s ease-in-out;
+        }
+
+        /* Header */
+        h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+            color: #2e3b8f;
+        }
+
+        /* Form Labels and Fields */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            color: #444;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-control {
+            border-radius: 8px;
+            padding: 1rem;
+            font-size: 1rem;
+            border: 1px solid #ddd;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .form-control:focus {
+            border-color: #4C6F8C;
+            box-shadow: 0 0 8px rgba(76, 111, 140, 0.2);
+        }
+
+        /* Button Styling */
+        .btn-primary {
+            background-color: #4C6F8C;
+            color: #fff;
+            border: none;
+            padding: 1rem;
+            font-size: 1.1rem;
+            border-radius: 8px;
+            width: 100%;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: #355e73;
+        }
+
+        /* Alerts (Success/Errors) */
+        .alert {
+            margin-bottom: 1.5rem;
+            border-radius: 8px;
+            padding: 1rem;
+            font-size: 1rem;
+        }
+
+        .alert-danger {
+            background-color: #f8d7da;
+            border-color: #dc3545;
+            color: #721c24;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            border-color: #28a745;
+            color: #155724;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 1rem;
+            color: #4C6F8C;
+        }
+
+        .footer a {
+            color: #4C6F8C;
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Smooth Fade-in Effect */
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 576px) {
+            .form-container {
+                padding: 2rem;
+                width: 90%;
+            }
+
+            h2 {
+                font-size: 1.6rem;
+            }
+
+            .btn-primary {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="form-container">
+        <h2>Welcome {{ full_name }}</h2>
+
+        {% if form.errors %}
+            <div class="alert alert-danger">
+                <ul>
+                    {% for field in form %}
+                        {% for error in field.errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    {% endfor %}
+                </ul>
+            </div>
+        {% elif form.is_bound %}
+            <div class="alert alert-success">Details saved successfully!</div>
+        {% endif %}
+
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label for="{{ form.name.id_for_label }}">Name</label>
+                {{ form.name }}
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.father_name.id_for_label }}">Father's Name</label>
+                {{ form.father_name }}
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.age.id_for_label }}">Age</label>
+                {{ form.age }}
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.dob.id_for_label }}">Date of Birth</label>
+                {{ form.dob }}
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.address.id_for_label }}">Address</label>
+                {{ form.address }}
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.user_id_proof.id_for_label }}">User ID Proof</label>
+                {{ form.user_id_proof }}
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.photo.id_for_label }}">Photo</label>
+                {{ form.photo }}
+            </div>
+
+            <button type="submit" class="btn btn-primary">Save Details</button>
+        </form>
+
+        {% if form.is_bound and form.is_valid %}
+            <a href="{% url 'generate_id' %}" class="btn btn-primary mt-3">Proceed to Generate ID</a>
+        {% endif %}
+    </div>
+
+
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
